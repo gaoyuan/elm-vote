@@ -14,6 +14,8 @@ import StartApp
 import String
 import Task
 
+import Debug
+
 -- MODEL
 
 type alias Model = List Candidate.Model
@@ -29,9 +31,12 @@ initDefault = (List.repeat 10 Candidate.initDefault, Effects.none)
 type Action 
   = LoadCandidates (Maybe (List Candidate.Model))
   | RequestCandidates
+  | CandidateAction Candidate.Model Candidate.Action
 
 update : Action -> Model -> (Model, Effects Action)
-update action model = 
+update action model =
+  let x = Debug.log "update" "update"
+  in 
   case action of
 
     LoadCandidates maybeCandidates ->
@@ -40,7 +45,33 @@ update action model =
       )
 
     RequestCandidates ->
-      ( model, getCandidates )
+      let
+        a = Debug.log "request" "request"
+      in
+        ( model, getCandidates )
+
+    -- delegation
+    CandidateAction candidate candidateAction ->
+      let
+
+        dummy = Debug.log "dummy" "dummy"
+        -- updateCandidate return type : ( Candidate.Model, Effects Action ) 
+        updateCandidate someCandidate =
+          if someCandidate.id == candidate.id then
+
+            let
+              ( newCandidate, newEffect ) = Candidate.update candidateAction someCandidate
+            in
+              ( newCandidate, Effects.map (CandidateAction candidate) newEffect )
+            
+          else
+            ( someCandidate, Effects.none )
+
+        ( newModel, newEffects ) = List.unzip (List.map updateCandidate model)
+
+      in
+        ( newModel , Effects.batch newEffects )
+      
 
 
 -- VIEW
@@ -61,7 +92,7 @@ view address model =
         [ class "content" ]
         [ div
             [ class "grid" ]
-            (List.map Candidate.view model)
+            (List.map (viewCandidate address) model)
         , div
             [ class "preview" ]
             [ button [ class "action action--close" ]
@@ -73,6 +104,8 @@ view address model =
         ]
     ]
 
+viewCandidate : Signal.Address Action -> Candidate.Model -> Html
+viewCandidate address x = Candidate.view (Signal.forwardTo address (CandidateAction x)) x
 
 -- EFFECTS
 

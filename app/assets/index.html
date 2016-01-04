@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="js csstransitions">
+<html lang="en">
 
   <head>
     <meta charset="UTF-8">
@@ -8,80 +8,76 @@
     <link rel="stylesheet" type="text/css" href="css/demo.css" />
     <link rel="stylesheet" type="text/css" href="css/style2.css" />
     <script src="js/modernizr-custom.js"></script>
-    <title>Elm And Twitter bootstrap</title>
+    <title>投票系统</title>
 
   </head>
 
-  <body class="demo-2">
-    <script type="text/javascript" src="app.js"></script>
-    <script type="text/javascript">
-    var app = Elm.fullscreen(Elm.App);
-
-    // Alternatively, embed the elm app in an element like this:
-    // var div = document.getElementById('elm');
-    // Elm.embed(Elm.App, div);
-    </script>
+  <body>
     <script src="js/imagesloaded.pkgd.min.js"></script>
     <script src="js/masonry.pkgd.min.js"></script>
     <script src="js/classie.js"></script>
     <script src="js/main.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript">
+      var app = Elm.fullscreen(Elm.App);
+    </script>
     <script>
-        (function() {
-            var support = { transitions: Modernizr.csstransitions },
-                // transition end event name
-                transEndEventNames = { 'WebkitTransition': 'webkitTransitionEnd', 'MozTransition': 'transitionend', 'OTransition': 'oTransitionEnd', 'msTransition': 'MSTransitionEnd', 'transition': 'transitionend' },
-                transEndEventName = transEndEventNames[ Modernizr.prefixed( 'transition' ) ],
-                onEndTransition = function( el, callback ) {
-                    var onEndCallbackFn = function( ev ) {
-                        if( support.transitions ) {
-                            if( ev.target != this ) return;
-                            this.removeEventListener( transEndEventName, onEndCallbackFn );
-                        }
-                        if( callback && typeof callback === 'function' ) { callback.call(this); }
-                    };
-                    if( support.transitions ) {
-                        el.addEventListener( transEndEventName, onEndCallbackFn );
-                    }
-                    else {
-                        onEndCallbackFn();
-                    }
-                };
+      (function() {
+        var support = { transitions: Modernizr.csstransitions },
+          // transition end event name
+          transEndEventNames = { 'WebkitTransition': 'webkitTransitionEnd', 'MozTransition': 'transitionend', 'OTransition': 'oTransitionEnd', 'msTransition': 'MSTransitionEnd', 'transition': 'transitionend' },
+          transEndEventName = transEndEventNames[ Modernizr.prefixed( 'transition' ) ],
+          onEndTransition = function( el, callback ) {
+            var onEndCallbackFn = function( ev ) {
+              if( support.transitions ) {
+                if( ev.target != this ) return;
+                this.removeEventListener( transEndEventName, onEndCallbackFn );
+              }
+              if( callback && typeof callback === 'function' ) { callback.call(this); }
+            };
+            if( support.transitions ) {
+              el.addEventListener( transEndEventName, onEndCallbackFn );
+            }
+            else {
+              onEndCallbackFn();
+            }
+          };
 
-            new GridFx(document.querySelector('.grid'), {
-                imgPosition : {
-                    x : -0.5,
-                    y : 1
-                },
-                onOpenItem : function(instance, item) {
-                    instance.items.forEach(function(el) {
-                        if(item != el) {
-                            var delay = Math.floor(Math.random() * 50);
-                            el.style.WebkitTransition = 'opacity .5s ' + delay + 'ms cubic-bezier(.7,0,.3,1), -webkit-transform .5s ' + delay + 'ms cubic-bezier(.7,0,.3,1)';
-                            el.style.transition = 'opacity .5s ' + delay + 'ms cubic-bezier(.7,0,.3,1), transform .5s ' + delay + 'ms cubic-bezier(.7,0,.3,1)';
-                            el.style.WebkitTransform = 'scale3d(0.1,0.1,1)';
-                            el.style.transform = 'scale3d(0.1,0.1,1)';
-                            el.style.opacity = 0;
-                        }
-                    });
-                },
-                onCloseItem : function(instance, item) {
-                    instance.items.forEach(function(el) {
-                        if(item != el) {
-                            el.style.WebkitTransition = 'opacity .4s, -webkit-transform .4s';
-                            el.style.transition = 'opacity .4s, transform .4s';
-                            el.style.WebkitTransform = 'scale3d(1,1,1)';
-                            el.style.transform = 'scale3d(1,1,1)';
-                            el.style.opacity = 1;
-
-                            onEndTransition(el, function() {
-                                el.style.transition = 'none';
-                                el.style.WebkitTransform = 'none';
-                            });
-                        }
-                    });
-                }
+        new GridFx(document.querySelector('.grid'), {
+          imgPosition : {
+            x : -0.5,
+            y : 1
+          },
+          onOpenItem : function(instance, item) {
+            instance.items.forEach(function(el) {
+              if(item != el) {
+                var delay = Math.floor(Math.random() * 50);
+                el.style.WebkitTransition = 'opacity .5s ' + delay + 'ms cubic-bezier(.7,0,.3,1), -webkit-transform .5s ' + delay + 'ms cubic-bezier(.7,0,.3,1)';
+                el.style.transition = 'opacity .5s ' + delay + 'ms cubic-bezier(.7,0,.3,1), transform .5s ' + delay + 'ms cubic-bezier(.7,0,.3,1)';
+                el.style.WebkitTransform = 'scale3d(0.1,0.1,1)';
+                el.style.transform = 'scale3d(0.1,0.1,1)';
+                el.style.opacity = 0;
+              }
             });
-        })();
+          },
+          onCloseItem : function(instance, item) {
+            instance.items.forEach(function(el) {
+              if(item != el) {
+                el.style.WebkitTransition = 'opacity .4s, -webkit-transform .4s';
+                el.style.transition = 'opacity .4s, transform .4s';
+                el.style.WebkitTransform = 'scale3d(1,1,1)';
+                el.style.transform = 'scale3d(1,1,1)';
+                el.style.opacity = 1;
+
+                onEndTransition(el, function() {
+                  el.style.transition = 'none';
+                  el.style.WebkitTransform = 'none';
+                });
+              }
+            });
+          }
+        });
+      })();
     </script>
 
   </body>

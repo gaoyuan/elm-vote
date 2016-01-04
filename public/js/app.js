@@ -10573,6 +10573,72 @@ Elm.Html.Attributes.make = function (_elm) {
                                         ,property: property
                                         ,attribute: attribute};
 };
+Elm.Html = Elm.Html || {};
+Elm.Html.Events = Elm.Html.Events || {};
+Elm.Html.Events.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Events = _elm.Html.Events || {};
+   if (_elm.Html.Events.values) return _elm.Html.Events.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $VirtualDom = Elm.VirtualDom.make(_elm);
+   var _op = {};
+   var keyCode = A2($Json$Decode._op[":="],"keyCode",$Json$Decode.$int);
+   var targetChecked = A2($Json$Decode.at,_U.list(["target","checked"]),$Json$Decode.bool);
+   var targetValue = A2($Json$Decode.at,_U.list(["target","value"]),$Json$Decode.string);
+   var defaultOptions = $VirtualDom.defaultOptions;
+   var Options = F2(function (a,b) {    return {stopPropagation: a,preventDefault: b};});
+   var onWithOptions = $VirtualDom.onWithOptions;
+   var on = $VirtualDom.on;
+   var messageOn = F3(function (name,addr,msg) {    return A3(on,name,$Json$Decode.value,function (_p0) {    return A2($Signal.message,addr,msg);});});
+   var onClick = messageOn("click");
+   var onDoubleClick = messageOn("dblclick");
+   var onMouseMove = messageOn("mousemove");
+   var onMouseDown = messageOn("mousedown");
+   var onMouseUp = messageOn("mouseup");
+   var onMouseEnter = messageOn("mouseenter");
+   var onMouseLeave = messageOn("mouseleave");
+   var onMouseOver = messageOn("mouseover");
+   var onMouseOut = messageOn("mouseout");
+   var onBlur = messageOn("blur");
+   var onFocus = messageOn("focus");
+   var onSubmit = messageOn("submit");
+   var onKey = F3(function (name,addr,handler) {    return A3(on,name,keyCode,function (code) {    return A2($Signal.message,addr,handler(code));});});
+   var onKeyUp = onKey("keyup");
+   var onKeyDown = onKey("keydown");
+   var onKeyPress = onKey("keypress");
+   return _elm.Html.Events.values = {_op: _op
+                                    ,onBlur: onBlur
+                                    ,onFocus: onFocus
+                                    ,onSubmit: onSubmit
+                                    ,onKeyUp: onKeyUp
+                                    ,onKeyDown: onKeyDown
+                                    ,onKeyPress: onKeyPress
+                                    ,onClick: onClick
+                                    ,onDoubleClick: onDoubleClick
+                                    ,onMouseMove: onMouseMove
+                                    ,onMouseDown: onMouseDown
+                                    ,onMouseUp: onMouseUp
+                                    ,onMouseEnter: onMouseEnter
+                                    ,onMouseLeave: onMouseLeave
+                                    ,onMouseOver: onMouseOver
+                                    ,onMouseOut: onMouseOut
+                                    ,on: on
+                                    ,onWithOptions: onWithOptions
+                                    ,defaultOptions: defaultOptions
+                                    ,targetValue: targetValue
+                                    ,targetChecked: targetChecked
+                                    ,keyCode: keyCode
+                                    ,Options: Options};
+};
 Elm.Native.Http = {};
 Elm.Native.Http.make = function(localRuntime) {
 
@@ -10950,42 +11016,70 @@ Elm.Candidate.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Http = Elm.Http.make(_elm),
    $Image = Elm.Image.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $Task = Elm.Task.make(_elm);
    var _op = {};
-   var view = function (model) {
+   var voteResponseDecoder = $Json$Decode.value;
+   _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
+   var voteAPI = function (model) {
+      return A2($Http.url,"http://api.giphy.com/v1/gifs",_U.list([A2(_op["=>"],"api_key","dc6zaTOxFJmzC"),A2(_op["=>"],"ids",model.id)]));
+   };
+   var RequestVote = {ctor: "RequestVote"};
+   var view = F2(function (address,model) {
+      var xx = A2($Debug.log,"1","1");
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("grid__item"),A2($Html$Attributes.attribute,"data-size","400x400")]),
       _U.list([A2($Html.a,
       _U.list([$Html$Attributes.href("http://placehold.it/400x400"),$Html$Attributes.$class("img-wrap")]),
       _U.list([$Image.view(model.image)
               ,A2($Html.div,
+              _U.list([]),
+              _U.list([A2($Html.p,
+                      _U.list([]),
+                      _U.list([$Html.text(A2($Basics._op["++"],$Basics.toString(model.number),A2($Basics._op["++"],"号  ",model.name)))]))
+                      ,A2($Html.p,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],$Basics.toString(model.votes),"票"))]))]))
+              ,A2($Html.div,
               _U.list([$Html$Attributes.$class("description description--grid")]),
               _U.list([A2($Html.h3,
                       _U.list([]),
                       _U.list([$Html.text(A2($Basics._op["++"],$Basics.toString(model.number),A2($Basics._op["++"],"号  ",model.name)))]))
-                      ,A2($Html.p,_U.list([]),_U.list([$Html.text(model.intro)]))
+                      ,A2($Html.p,_U.list([A2($Html$Events.onClick,address,RequestVote)]),_U.list([$Html.text(model.intro)]))
                       ,A2($Html.div,
                       _U.list([$Html$Attributes.$class("details")]),
                       _U.list([A2($Html.ul,
                       _U.list([]),
                       _U.list([A2($Html.li,
-                              _U.list([]),
-                              _U.list([A2($Html.a,
-                              _U.list([$Html$Attributes.$class("hvr-grow fa fa-thumbs-o-up"),$Html$Attributes.href("#")]),
-                              _U.list([A2($Html.span,_U.list([]),_U.list([$Html.text("投她一票")]))]))]))
-                              ,A2($Html.li,
-                              _U.list([]),
-                              _U.list([A2($Html.a,
-                              _U.list([$Html$Attributes.$class("hvr-grow fa fa-search"),$Html$Attributes.href("#")]),
-                              _U.list([A2($Html.span,_U.list([]),_U.list([$Html.text("详细资料")]))]))]))]))]))]))]))]));
-   };
-   var initDefault = {id: "9cyvbwecx7z6"
+                      _U.list([]),
+                      _U.list([A2($Html.a,
+                      _U.list([$Html$Attributes.$class("hvr-grow fa fa-search"),$Html$Attributes.href(A2($Basics._op["++"],"/detail.html?id=",model.id))]),
+                      _U.list([A2($Html.span,_U.list([]),_U.list([$Html.text("详细资料")]))]))]))]))]))]))]))]));
+   });
+   var Vote = function (a) {    return {ctor: "Vote",_0: a};};
+   var vote = function (model) {    return $Effects.task(A2($Task.map,Vote,$Task.toMaybe(A2($Http.get,voteResponseDecoder,voteAPI(model)))));};
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      if (_p0.ctor === "Vote") {
+            var _p1 = _p0._0;
+            if (_p1.ctor === "Nothing") {
+                  return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
+               } else {
+                  return {ctor: "_Tuple2",_0: _U.update(model,{votes: model.votes + 1}),_1: $Effects.none};
+               }
+         } else {
+            return {ctor: "_Tuple2",_0: model,_1: vote(model)};
+         }
+   });
+   var initDefault = {id: "feqkVgjJpYtjy"
                      ,number: 1
                      ,name: "张狗蛋"
                      ,intro: "宝坻电竞届的女神，LOL耀眼新星。张狗蛋生于大口屯，从小就展现出了她在电竞方面的独特天赋。七岁时的她就已经开始外出打野，邻居透露她曾对自家养鸡场的鸡连续补刀。"
@@ -10995,7 +11089,17 @@ Elm.Candidate.make = function (_elm) {
       return {id: id,number: number,name: name,intro: intro,image: $Image.initWithSrc(imgUrl),votes: votes};
    });
    var Model = F6(function (a,b,c,d,e,f) {    return {id: a,number: b,name: c,intro: d,image: e,votes: f};});
-   return _elm.Candidate.values = {_op: _op,Model: Model,init: init,initDefault: initDefault,view: view};
+   return _elm.Candidate.values = {_op: _op
+                                  ,Model: Model
+                                  ,init: init
+                                  ,initDefault: initDefault
+                                  ,Vote: Vote
+                                  ,RequestVote: RequestVote
+                                  ,update: update
+                                  ,view: view
+                                  ,vote: vote
+                                  ,voteAPI: voteAPI
+                                  ,voteResponseDecoder: voteResponseDecoder};
 };
 Elm.App = Elm.App || {};
 Elm.App.make = function (_elm) {
@@ -11039,12 +11143,14 @@ Elm.App.make = function (_elm) {
    A2($Json$Decode.at,_U.list(["images","downsized","width"]),$Json$Decode.string)))));
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    var candidatesAPI = A2($Http.url,"http://api.giphy.com/v1/gifs/search",_U.list([A2(_op["=>"],"api_key","dc6zaTOxFJmzC"),A2(_op["=>"],"q","cats")]));
+   var CandidateAction = F2(function (a,b) {    return {ctor: "CandidateAction",_0: a,_1: b};});
+   var viewCandidate = F2(function (address,x) {    return A2($Candidate.view,A2($Signal.forwardTo,address,CandidateAction(x)),x);});
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("container")]),
       _U.list([A2($Html.div,
       _U.list([$Html$Attributes.$class("content")]),
-      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("grid")]),A2($List.map,$Candidate.view,model))
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("grid")]),A2($List.map,viewCandidate(address),model))
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("preview")]),
               _U.list([A2($Html.button,
@@ -11057,12 +11163,26 @@ Elm.App.make = function (_elm) {
    var LoadCandidates = function (a) {    return {ctor: "LoadCandidates",_0: a};};
    var getCandidates = $Effects.task(A2($Task.map,LoadCandidates,$Task.toMaybe(A2($Http.get,candidatesJsonDecoder,candidatesAPI))));
    var update = F2(function (action,model) {
+      var x = A2($Debug.log,"update","update");
       var _p0 = action;
-      if (_p0.ctor === "LoadCandidates") {
-            return {ctor: "_Tuple2",_0: A2($Maybe.withDefault,_U.list([]),_p0._0),_1: $Effects.none};
-         } else {
-            return {ctor: "_Tuple2",_0: model,_1: getCandidates};
-         }
+      switch (_p0.ctor)
+      {case "LoadCandidates": return {ctor: "_Tuple2",_0: A2($Maybe.withDefault,_U.list([]),_p0._0),_1: $Effects.none};
+         case "RequestCandidates": var a = A2($Debug.log,"request","request");
+           return {ctor: "_Tuple2",_0: model,_1: getCandidates};
+         default: var _p3 = _p0._0;
+           var updateCandidate = function (someCandidate) {
+              if (_U.eq(someCandidate.id,_p3.id)) {
+                    var _p1 = A2($Candidate.update,_p0._1,someCandidate);
+                    var newCandidate = _p1._0;
+                    var newEffect = _p1._1;
+                    return {ctor: "_Tuple2",_0: newCandidate,_1: A2($Effects.map,CandidateAction(_p3),newEffect)};
+                 } else return {ctor: "_Tuple2",_0: someCandidate,_1: $Effects.none};
+           };
+           var _p2 = $List.unzip(A2($List.map,updateCandidate,model));
+           var newModel = _p2._0;
+           var newEffects = _p2._1;
+           var dummy = A2($Debug.log,"dummy","dummy");
+           return {ctor: "_Tuple2",_0: newModel,_1: $Effects.batch(newEffects)};}
    });
    var initDefault = {ctor: "_Tuple2",_0: A2($List.repeat,10,$Candidate.initDefault),_1: $Effects.none};
    var app = $StartApp.start({init: initDefault,update: update,view: view,inputs: _U.list([])});
@@ -11074,8 +11194,10 @@ Elm.App.make = function (_elm) {
                             ,initDefault: initDefault
                             ,LoadCandidates: LoadCandidates
                             ,RequestCandidates: RequestCandidates
+                            ,CandidateAction: CandidateAction
                             ,update: update
                             ,view: view
+                            ,viewCandidate: viewCandidate
                             ,getCandidates: getCandidates
                             ,candidatesAPI: candidatesAPI
                             ,candidatesJsonDecoder: candidatesJsonDecoder
